@@ -7,12 +7,12 @@
     - name: Check if VG exists
       command: lvs vg_app
       register: vg_check
-      ignore_erros: true
+      ignore_errors: true
 
     - name: Check if LV exists
       command: lvs vg_app/lv_app
       register: lv_check
-      ignore_erros: true
+      ignore_errors: true
 
     - name: Create PV and VG named vg_app
       lvg:
