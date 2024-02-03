@@ -1,5 +1,5 @@
 ---
-- name: Create LVM and XFS filesystem
+- name: Create App Drive on sdb
   hosts: localhost
   become: true
 
@@ -41,5 +41,6 @@
     - name: Update /etc/fstab
       lineinfile:
         path: /etc/fstab
+        regexp: "^.*\\s+/app\\s+.*$"
         line: "/dev/vg_app/lv_app    /app    xfs    defaults    0 0"
       run_once: true
