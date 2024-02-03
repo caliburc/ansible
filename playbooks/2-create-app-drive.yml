@@ -1,5 +1,6 @@
 ---
 - name: Create LVM and XFS filesystem
+  hosts: localhost
   become: true
 
   tasks:
