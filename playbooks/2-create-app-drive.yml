@@ -4,14 +4,8 @@
   become: true
 
   tasks:
-    - name: Check if PV exists
-      lvg_info:
-        pvs: /dev/sdb
-        vg: vg_app
-      register: pv_check
-
     - name: Check if VG exists
-      lvg_info:
+      lvol_info:
         vg: vg_app
       register: vg_check
 
@@ -26,7 +20,7 @@
         pvs: /dev/sdb
         vg: vg_app
         state: present
-      when: pv_check.pv_info is not defined or vg_check.vg_info is not defined
+      when: vg_check.vg_info is not defined
       run_once: true
 
     - name: Create Logical Volume (LV) named lv_app
