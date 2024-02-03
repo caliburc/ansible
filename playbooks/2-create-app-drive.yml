@@ -4,11 +4,29 @@
   become: true
 
   tasks:
+    - name: Check if PV exists
+      lvg_info:
+        pvs: /dev/sdb
+        vg: vg_app
+      register: pv_check
+
+    - name: Check if VG exists
+      lvg_info:
+        vg: vg_app
+      register: vg_check
+
+    - name: Check if LV exists
+      lvol_info:
+        vg: vg_app
+        lv: lv_app
+      register: lv_check
+
     - name: Create PV and VG named vg_app
       lvg:
         pvs: /dev/sdb
         vg: vg_app
         state: present
+      when: pv_check.pv_info is not defined or vg_check.vg_info is not defined
       run_once: true
 
     - name: Create Logical Volume (LV) named lv_app
@@ -17,12 +35,14 @@
         lv: lv_app
         size: 100%FREE
         state: present
+      when: lv_check.lv_info is not defined
       run_once: true
 
     - name: Format LV with XFS filesystem
       filesystem:
         fstype: xfs
         dev: /dev/vg_app/lv_app
+      when: lv_check.lv_info is not defined
       run_once: true
 
     - name: Create /app directory
