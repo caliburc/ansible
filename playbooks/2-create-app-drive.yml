@@ -1,0 +1,50 @@
+---
+- name: Create LVM and XFS filesystem
+  become: true
+
+  tasks:
+    - name: Create Physical Volume (PV) on /dev/sdb
+      lvg:
+        pv: /dev/sdb
+        state: present
+      run_once: true
+
+    - name: Create Volume Group (VG) named vg_app
+      lvg:
+        vg: vg_app
+        pvs: /dev/sdb
+        state: present
+      run_once: true
+
+    - name: Create Logical Volume (LV) named lv_app
+      lvol:
+        vg: vg_app
+        lv: lv_app
+        size: 100%FREE
+        state: present
+      run_once: true
+
+    - name: Format LV with XFS filesystem
+      filesystem:
+        fstype: xfs
+        dev: /dev/vg_app/lv_app
+      run_once: true
+
+    - name: Create /app directory
+      file:
+        path: /app
+        state: directory
+        mode: '0755'
+
+    - name: Mount LV to /app
+      mount:
+        path: /app
+        src: /dev/vg_app/lv_app
+        fstype: xfs
+        state: mounted
+
+    - name: Update /etc/fstab
+      lineinfile:
+        path: /etc/fstab
+        line: "/dev/vg_app/lv_app    /app    xfs    defaults    0 0"
+      run_once: true
