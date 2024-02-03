@@ -4,16 +4,10 @@
   become: true
 
   tasks:
-    - name: Create Physical Volume (PV) on /dev/sdb
+    - name: Create PV and VG named vg_app
       lvg:
-        pv: /dev/sdb
-        state: present
-      run_once: true
-
-    - name: Create Volume Group (VG) named vg_app
-      lvg:
-        vg: vg_app
         pvs: /dev/sdb
+        vg: vg_app
         state: present
       run_once: true
 
