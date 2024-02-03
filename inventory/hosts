@@ -1,1 +1,13 @@
+[ipaservers]
+ipa8.home.lab
 
+[ipaclients]
+ansible-core9 ansible-core.home.lab=192.168.0.31
+ansible-core8 ansible-core8.home.lab=192.168.0.32
+
+[ipaclients:vars]
+ipaclient_domain=home.lab
+ipaclient_realm=HOME.LAB
+ipaadmin_principal=admin
+ipaclient_mkhomedir=yes
+ipaclient_enable_dns_updates=yes
