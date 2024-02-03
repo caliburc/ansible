@@ -4,22 +4,17 @@
   become: true
 
   tasks:
-    - name: Check if VG exists
-      command: lvs vg_app
-      register: vg_check
-      ignore_errors: true
-
-    - name: Check if LV exists
-      command: lvs vg_app/lv_app
-      register: lv_check
-      ignore_errors: true
+    - name: Fail if vg_app/lv_app exists
+      stat:
+        path: /dev/vg_app/lv_app
+      register: lvstat
+      failed_when: lvstat.stat.exists
 
     - name: Create PV and VG named vg_app
       lvg:
         pvs: /dev/sdb
         vg: vg_app
         state: present
-      when: vg_check.rc != 0
       
     - name: Create Logical Volume (LV) named lv_app
       lvol:
@@ -27,14 +22,12 @@
         lv: lv_app
         size: 100%FREE
         state: present
-      when: lv_check.rc != 0
 
     - name: Format LV with XFS filesystem
       filesystem:
         fstype: xfs
         dev: /dev/vg_app/lv_app
-      when: lv_check.rc != 0
-
+        
     - name: Create /app directory
       file:
         path: /app
@@ -52,4 +45,4 @@
       lineinfile:
         path: /etc/fstab
         regexp: "^.*\\s+/app\\s+.*$"
-        line: "/dev/vg_app/lv_app    /app    xfs    defaults    0 0"
+        line: "/dev/vg_app/lv_app    /app    xfs    defaults    1 2"
