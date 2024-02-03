@@ -1,0 +1,16 @@
+---
+- name: Configure IPA Client
+  hosts: ipaclients
+  become: true
+  vars_files:
+  - ipa-secrets.yml
+
+  roles:
+    - role: ipaclient
+      state: present
+
+  handlers:
+    - name: Restart SSSD
+      systemd:
+        name: sssd
+        state: restarted
