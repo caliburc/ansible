@@ -1,9 +1,9 @@
+[ipaclients]
+192.168.0.31
+192.168.0.33
+
 [ipaservers]
 ipa8.home.lab
-
-[ipaclients]
-ansible-core9 ansible-core.home.lab=192.168.0.31
-ansible-core8 ansible-core8.home.lab=192.168.0.32
 
 [ipaclients:vars]
 ipaclient_domain=home.lab
