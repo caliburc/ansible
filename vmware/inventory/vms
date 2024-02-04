@@ -1,0 +1,3 @@
+[VMs]
+test-vm1 guest_hostname="test-vm1" guest_ip="192.168.0.33" guest_vcpu="2" guest_ram="4096"
+test-vm2 guest_hostname="test-vm2" guest_ip="192.168.0.34" guest_vcpu="2" guest_ram="4096"

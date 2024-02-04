@@ -1,0 +1,32 @@
+---
+- name: Create a VM from a template
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+  - name: Clone the template
+    vmware_guest:
+      hostname: 192.168.0.12
+      username: administrator@vsphere.local
+      password: LarryCode12!@
+      validate_certs: False
+      name: testvm_1
+      template: rhel8-template
+      datacenter: HomeLab
+      cluster: Cluster
+      folder: /deploy
+      state: poweredon
+      hardware:
+        memory_mb: 4096
+        num_cpus: 2
+      networks:
+      - name: HomeVMNet
+        ip: 192.168.0.33
+        netmask: 255.255.255.0
+        device_type: vmxnet3
+      wait_for_ip_address: yes
+      wait_for_ip_address_timeout: 300
+      customization:
+        domain: "home.lab"
+    delegate_to: localhost
+    register: deploy_vm
