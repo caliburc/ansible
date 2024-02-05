@@ -1,7 +1,0 @@
----
-- name: Uninstall IPA Client
-  hosts: ipaclients
-  become: true
-  roles:
-    - role: ipaclient
-      state: absent
