@@ -4,13 +4,17 @@
   become: true
 
   tasks:
-    - name: Copy resolv.conf to ipaclients
-      copy:
-        src: resolv.conf
-        dest: /etc/resolv.conf
-        owner: root
-        group: root
-        mode: 0644
+    - name: Remove existing nameservers
+      lineinfile:
+        path: /etc/resolv.conf
+        state: absent
+        regexp: '^nameserver'
+    - name: Add new nameservers
+      blockinfile:
+        path: /etc/resolv.conf
+        block: |
+          nameserver 192.168.0.10
+          nameserver 8.8.8.8
 
 - name: Configure IPA Client
   hosts: ipaclients
