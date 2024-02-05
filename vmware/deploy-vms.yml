@@ -1,0 +1,22 @@
+---
+- hosts: vms
+  gather_facts: false
+  vars_files:
+    - answerfile.yml
+    - secrets.yml
+  roles:
+    - deploy-vsphere-template
+
+- hosts: vms
+  gather_facts: false
+  tasks:
+    - delegate_to: localhost
+      ipadnsrecord:
+        ipaadmin_principal: jason.johnson.adm
+        ipaadmin_password: '!@#$CalibuR89(*!'
+        state: present
+        zone_name: home.lab
+        record_name: "{{ inventory_hostname }}"
+        record_type: 'A'
+        record_value: "{{ guest_custom_ip }}"
+        create_reverse: yes

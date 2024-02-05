@@ -1,0 +1,30 @@
+---
+- name: Update resolv.conf
+  hosts: ipaclients
+  become: true
+
+  tasks:
+    - name: Copy resolv.conf to ipaclients
+      copy:
+        src: resolv.conf
+        dest: /etc/resolv.conf
+        owner: root
+        group: root
+        mode: 0644
+
+- name: Configure IPA Client
+  hosts: ipaclients
+  become: true
+  vars_files:
+    - ipa-secrets.yml
+
+  roles:
+    - role: ipaclient
+      state: present
+      notify: restart_sssd
+
+  handlers:
+    - name: restart_sssd
+      systemd:
+        name: sssd
+        state: restarted

@@ -1,0 +1,7 @@
+[ipaserver]
+ipa8.home.lab
+
+[vms]
+rhel8-3 deploy_vsphere_datastore='vLarry_3.5T_Local3' guest_custom_ip='192.168.0.35' guest_notes=''
+rhel8-4 deploy_vsphere_datastore='vLarry_3.5T_Local3' guest_custom_ip='192.168.0.36' guest_notes=''
+rhel8-5 deploy_vsphere_datastore='vLarry_3.5T_Local3' guest_custom_ip='192.168.0.37' guest_notes=''

@@ -1,0 +1,48 @@
+---
+- name: Create App Drive on sdb
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: Fail if vg_app/lv_app exists
+      stat:
+        path: /dev/vg_app/lv_app
+      register: lvstat
+      failed_when: lvstat.stat.exists
+
+    - name: Create PV and VG named vg_app
+      lvg:
+        pvs: /dev/sdb
+        vg: vg_app
+        state: present
+      
+    - name: Create Logical Volume (LV) named lv_app
+      lvol:
+        vg: vg_app
+        lv: lv_app
+        size: 100%FREE
+        state: present
+
+    - name: Format LV with XFS filesystem
+      filesystem:
+        fstype: xfs
+        dev: /dev/vg_app/lv_app
+        
+    - name: Create /app directory
+      file:
+        path: /app
+        state: directory
+        mode: '0755'
+
+    - name: Mount LV to /app
+      mount:
+        path: /app
+        src: /dev/vg_app/lv_app
+        fstype: xfs
+        state: mounted
+
+    - name: Update /etc/fstab
+      lineinfile:
+        path: /etc/fstab
+        regexp: "^.*\\s+/app\\s+.*$"
+        line: "/dev/vg_app/lv_app    /app    xfs    defaults    1 2"

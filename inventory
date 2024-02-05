@@ -1,0 +1,17 @@
+[ipaclients]
+192.168.0.31
+192.168.0.32
+192.168.0.33
+rhel8-3.home.lab
+rhel8-4.home.lab
+rhel8-5.home.lab
+
+[ipaservers]
+ipa8.home.lab
+
+[ipaclients:vars]
+ipaclient_domain=home.lab
+ipaclient_realm=HOME.LAB
+ipaadmin_principal=admin
+ipaclient_mkhomedir=yes
+ipaclient_enable_dns_updates=yes
