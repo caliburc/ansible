@@ -13,12 +13,14 @@ Playbook and role to deploy multiple vSphere virtual machines from a template us
 The required files are:
 ```
 ├── ansible.cfg
-├── answerfile.yml
-├── deploy-kubernetes-prod.yml
+├── deploy-vms.yml
 ├── roles
 │   └── deploy-vsphere-template
 │       └── tasks
 │           └── main.yml
+├── vars
+│   └── answerfile.yml
+│   └── secrets.yml
 └── vms-to-deploy
 ```
 
@@ -26,14 +28,19 @@ The required files are:
 2. Edit the ```answerfile.yml``` file to set the correct parameter for
     * the infrastructure (where to deploy)
     * the common options for the virtual machines
-3. (optional) Edit the role.
+4. Edit the ```secrets.yml``` file to set username\password for vsphere
+5. (optional) Edit the role.
 
 > **Note:** Uncomment the `#resource_pool: '{{ deploy_vsphere_resourcepool }}'` line in the `roles/deploy-vsphere-template/tasks/main.yml` file to deploy the virtual machines in a specific resource pool; don't forget to reflect your resource pool name in the `answerfile.yml`.
 
 ## Execution
 
 ```
-ansible-playbook -i vms-to-deploy deploy-kubernetes-prod.yml
+ansible-playbook deploy-vms.yml
 ```
 
-Enjoy! :)
+## Optionally you can build a seperate inventory file
+```
+ansible-playbook -i my-new-inventory deploy-vms.yml
+````
+
