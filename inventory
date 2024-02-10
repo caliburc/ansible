@@ -1,10 +1,10 @@
 [ipaclients]
-192.168.0.31
-192.168.0.32
-192.168.0.33
-rhel8-3.home.lab
-rhel8-4.home.lab
-rhel8-5.home.lab
+ansible-core host_env_description="PROD" host_rbgroup="group 4"
+#192.168.0.32
+ansible-db
+#rhel8-3.home.lab
+#rhel8-4.home.lab
+#rhel8-5.home.lab
 
 [ipaservers]
 ipa8.home.lab

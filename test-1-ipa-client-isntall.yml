@@ -1,0 +1,28 @@
+---
+- name: Update resolv.conf
+  hosts: ipaclients
+  become: true
+  vars_files:
+    - ipa-secrets.yml
+  
+  tasks:
+    - name: Copy resolv.conf to ipaclients
+      copy:
+        src: resolv.conf
+        dest: /etc/resolv.conf
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Configure IPA Client
+      include_role:
+        name: ipaclient
+    
+    - name: change description of host in ipa
+      delegate_to: localhost
+      ipahost:
+        ipaadmin_principal: "{{ ipaadmin_principal }}"
+        ipaadmin_password: "{{ ipaadmin_password }}"
+        description: "env:{{ host_env_description }} reboot_group:{{ host_rbgroup }}"
+        name: "{{ inventory_hostname }}"
+        
